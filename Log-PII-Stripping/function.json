@@ -13,10 +13,10 @@
     {
       "type": "cosmosDB",
       "name": "outputDocument",
-      "databaseName": "your-database-name",
-      "collectionName": "your-collection-name",
-      "createIfNotExists": true,
-      "connectionStringSetting": "your-cosmosdb-connection",
+      "databaseName": "request-logs",
+      "containerName": "logs",
+      "createIfNotExists": false,
+      "connection": "COSMOSDB_CONN",
       "direction": "out"
     }
   ]

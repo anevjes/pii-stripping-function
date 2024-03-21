@@ -18,10 +18,10 @@ async def main(events: List[EventHubEvent], outputDocument: func.Out[func.Docume
         input_data: List[str] = []
         input_data.append(output_binding_data)
 
-        output_binding_data = await analyze_pii_async(input_data)
+        output_binding_data2 = await analyze_pii_async(input_data)
         logging.info(f"PII stripped data: {output_binding_data}") 
 
-        outputDocument.set(func.Document(output_binding_data))
+        outputDocument.set(func.Document.from_json(output_binding_data))
 
 
 
@@ -76,7 +76,7 @@ async def analyze_pii_async(input_text: List[str]) -> None:
                     logging.info(f"......Entity: {pii_entity.text}")
                     logging.info(f".........Category: {pii_entity.category}")
                     logging.info(f".........Confidence Score: {pii_entity.confidence_score}")
-                    if pii_entity.confidence_score >= 0.8 and pii_entity.category != "DateTime":
+                    if pii_entity.confidence_score >= 0.8:
                         logging.info(f"Removing PII entity: {pii_entity.text}, category: {pii_entity.category} from the logged payload")
                         doc = doc.replace(pii_entity.text, "*PII*")
 
