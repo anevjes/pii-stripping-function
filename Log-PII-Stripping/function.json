@@ -1,0 +1,23 @@
+{
+  "scriptFile": "__init__.py",
+  "bindings": [
+    {
+      "type": "eventHubTrigger",
+      "name": "events",
+      "direction": "in",
+      "eventHubName": "anevjeseh-90f46b4815",
+      "connection": "EH_CONNECTION_STRING",
+      "cardinality": "many",
+      "consumerGroup": "openailogger"
+    },
+    {
+      "type": "cosmosDB",
+      "name": "outputDocument",
+      "databaseName": "your-database-name",
+      "collectionName": "your-collection-name",
+      "createIfNotExists": true,
+      "connectionStringSetting": "your-cosmosdb-connection",
+      "direction": "out"
+    }
+  ]
+}
