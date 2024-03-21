@@ -1,10 +1,12 @@
 import logging
+import uuid
 import azure.functions as func
 from azure.functions import EventHubEvent
 from typing import List
 import asyncio
 import logging
 from typing import List
+import json
 
 
 
@@ -18,10 +20,16 @@ async def main(events: List[EventHubEvent], outputDocument: func.Out[func.Docume
         input_data: List[str] = []
         input_data.append(output_binding_data)
 
-        output_binding_data2 = await analyze_pii_async(input_data)
-        logging.info(f"PII stripped data: {output_binding_data}") 
+        pii_output = await analyze_pii_async(input_data)
+        logging.info(f"PII stripped data: {pii_output}") 
 
-        outputDocument.set(func.Document.from_json(output_binding_data))
+        document = func.Document.from_dict({
+            'id': str(uuid.uuid4()),
+            'LogId':str(uuid.uuid4()),
+            'pii-stripped-data': pii_output
+        })
+
+        outputDocument.set(document)
 
 
 
@@ -42,8 +50,10 @@ async def analyze_pii_async(input_text: List[str]) -> None:
 
     # endpoint = os.environ["AZURE_LANGUAGE_ENDPOINT"]
     # key = os.environ["AZURE_LANGUAGE_KEY"]
-    endpoint = "https://ai-sentry-cog-service.cognitiveservices.azure.com/"
-    key = "8ae81ff4f7f844e6987b8bfb47e56822"
+     # you should use env variables instead of hardcoding the values
+    endpoint = "https://<yourservice>.cognitiveservices.azure.com/"
+    key = "insertYourKey"
+   
 
     text_analytics_client = TextAnalyticsClient(
         endpoint=endpoint,
